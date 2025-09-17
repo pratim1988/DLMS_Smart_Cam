@@ -56,7 +56,7 @@ afterEvaluate {
             release(MavenPublication) {
                 from components.release
                 groupId = 'com.github.pratim1988'
-                artifactId = 'dlms-smart-lib'
+                artifactId = 'DLMS_Smart_Cam'
                 version = '1.0.0'
             }
         }
