@@ -77,9 +77,11 @@ public class SmartDLMS {
     UsbHelper usbHelper;
     Boolean meterMatched=true;
     SmartDLMSActionListener smartDLMSActionListener;
-    public SmartDLMS(Context ctx,SmartDLMSActionListener smartDLMSActionListener) {
+    String meterSerialNumber;
+    public SmartDLMS(Context ctx,String meterSerialNumber,SmartDLMSActionListener smartDLMSActionListener) {
         this.ctx=ctx;
         this.smartDLMSActionListener=smartDLMSActionListener;
+        this.meterSerialNumber=meterSerialNumber;
         setupClient();
         checkUSB();
     }
@@ -311,7 +313,7 @@ public class SmartDLMS {
                     //long iv1 = ((Number) d1.getValue()).longValue();
                     System.out.println("Meter Serial no: " + String.valueOf(d1.getValue()));
                     reply.clear();
-                    if(!"AS3054856".equalsIgnoreCase(String.valueOf(d1.getValue()))){
+                    if(!meterSerialNumber.equalsIgnoreCase(String.valueOf(d1.getValue()))){
                         meterMatched=false;
                     }
 
@@ -605,15 +607,16 @@ public class SmartDLMS {
                         try {
                             //Notify activity that association has read again.
                             Toast.makeText(ctx, "Refresh done.", Toast.LENGTH_SHORT).show();
-                            toggleStatusButton();
+                            //toggleStatusButton();
                             progressDialog.dismiss();
                             if(meterMatched){
-                                smartDLMSActionListener.onAssociationComplete(true,client);
+                                toggleStatusButton();
                             }else{
-                                smartDLMSActionListener.onAssociationComplete(false,null);
+                                smartDLMSActionListener.onAssociationComplete(false,0,"Meter not matched");
                             }
                         } catch (Exception ex) {
                             Toast.makeText(ctx, "Refresh error."+ex.getMessage(), Toast.LENGTH_SHORT).show();
+                            smartDLMSActionListener.onAssociationComplete(false,0,ex.getMessage());
                         }
                     });
                 } catch (Exception e) {
@@ -633,11 +636,14 @@ public class SmartDLMS {
                 readDataBlock(client.read(fff,2),rgg);
                 System.out.println("Relay Output State: " + rgg.getValue().toString());
                 if(rgg.getValue().toString().equalsIgnoreCase("true")){
-                    smartDLMSActionListener.relayStatus(2);
+                    //smartDLMSActionListener.relayStatus(2);
+                    smartDLMSActionListener.onAssociationComplete(true,2,"Meter matched");
                 }else if(rgg.getValue().toString().equalsIgnoreCase("false")){
-                    smartDLMSActionListener.relayStatus(1);
+                    //smartDLMSActionListener.relayStatus(1);
+                    smartDLMSActionListener.onAssociationComplete(true,1,"Meter matched");
                 }else{
-                    smartDLMSActionListener.relayStatus(3);
+                    //smartDLMSActionListener.relayStatus(3);
+                    smartDLMSActionListener.onAssociationComplete(true,3,"Meter matched");
                 }
                 //smartDLMSActionListener.onAssociationComplete(true,client);
                 //System.out.println("Current Relay status: " + relayStatus);
@@ -661,8 +667,10 @@ public class SmartDLMS {
                 readDataBlock(frames, reply);
                 Toast.makeText(ctx, "Action completed.", Toast.LENGTH_SHORT).show();
                 toggleStatusButton();
+                smartDLMSActionListener.onActionComplete(true);
             } catch (Exception e) {
                 Toast.makeText(ctx, e.getMessage() + "getString(R.string.error)", Toast.LENGTH_SHORT).show();
+                smartDLMSActionListener.onActionComplete(false);
             }
         }));
     }

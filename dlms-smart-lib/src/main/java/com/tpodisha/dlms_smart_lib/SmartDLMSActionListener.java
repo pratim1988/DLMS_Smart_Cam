@@ -6,8 +6,8 @@ import gurux.dlms.secure.GXDLMSSecureClient;
 
 public interface SmartDLMSActionListener {
     void onActionComplete(boolean status);
-    void relayStatus(int i);
-    void onAssociationComplete(boolean status, GXDLMSSecureClient secureClient);
-    void onError(String message);
-    void onPortConfigSuccess(UsbSerialDriver driver);
+    //void relayStatus(int i);
+    void onAssociationComplete(boolean status,int relayStatus,String message);
+    //void onError(String message);
+    //void onPortConfigSuccess(boolean status);
 }
