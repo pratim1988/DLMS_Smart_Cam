@@ -116,7 +116,7 @@ public class SmartDLMS {
     }
 
     private void setupClient() {
-        /*usbManager = (UsbManager) ctx.getSystemService(Context.USB_SERVICE);
+        usbManager = (UsbManager) ctx.getSystemService(Context.USB_SERVICE);
         this.permissionIntent = PendingIntent.getBroadcast(ctx, 0,
                 new Intent(ACTION_USB_PERMISSION), PendingIntent.FLAG_IMMUTABLE);
         IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
@@ -131,7 +131,7 @@ public class SmartDLMS {
                     usbManager.requestPermission(device, permissionIntent);
                 }
             }
-        }*/
+        }
 
         client = new GXDLMSSecureClient();
         mDevice.setMedia(new GXSerial(ctx));
