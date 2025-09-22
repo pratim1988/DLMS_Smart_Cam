@@ -443,7 +443,7 @@ public class SmartDLMS {
         }
     }
 
-    public void readDLMSPacket(byte[] data, GXReplyData reply)
+    private void readDLMSPacket(byte[] data, GXReplyData reply)
             throws Exception {
         if (data == null || data.length == 0) {
             return;
@@ -569,7 +569,7 @@ public class SmartDLMS {
         }
     }
 
-    public Object readObject(
+    private Object readObject(
             GXDLMSObject item,
             int attributeIndex)
             throws Exception {
@@ -587,7 +587,7 @@ public class SmartDLMS {
         }
     }
 
-    public void refresh() throws Exception {
+    private void refresh() throws Exception {
         // Get Association view from the meter.
         GXReplyData reply = new GXReplyData();
         readDataBlock(client.getObjectsRequest(), reply);
@@ -658,7 +658,7 @@ public class SmartDLMS {
 
     }
 
-    public void onInvoke(byte[][] frames) {
+    private void onInvoke(byte[][] frames) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Handler h = new Handler(Looper.getMainLooper());
         executor.execute(() -> h.post(() -> {
@@ -727,4 +727,63 @@ public class SmartDLMS {
         }
     }
 
+    public void smartDisconnect(){
+        GXDLMSDisconnectControl dc = new GXDLMSDisconnectControl();
+        byte[][] frames = null;
+        //dc.setLogicalName("0.0.96.3.10.255");
+        try {
+            //client.method(dc, 1, 0, DataType.INT8);
+            frames = dc.remoteDisconnect(client);
+        } catch (InvalidKeyException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchPaddingException e) {
+            throw new RuntimeException(e);
+        } catch (InvalidAlgorithmParameterException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalBlockSizeException e) {
+            throw new RuntimeException(e);
+        } catch (BadPaddingException e) {
+            throw new RuntimeException(e);
+        } catch (SignatureException e) {
+            throw new RuntimeException(e);
+        } finally {
+            onInvoke(frames);
+        }
+    }
+
+    public void smartReconnect(){
+        GXDLMSDisconnectControl dc = new GXDLMSDisconnectControl();
+        byte[][] frames = null;
+        //dc.setLogicalName("0.0.96.3.10.255");
+        try {
+            //client.method(dc, 1, 0, DataType.INT8);
+            frames = dc.remoteReconnect(client);
+        } catch (InvalidKeyException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchPaddingException e) {
+            throw new RuntimeException(e);
+        } catch (InvalidAlgorithmParameterException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalBlockSizeException e) {
+            throw new RuntimeException(e);
+        } catch (BadPaddingException e) {
+            throw new RuntimeException(e);
+        } catch (SignatureException e) {
+            throw new RuntimeException(e);
+        } finally {
+            onInvoke(frames);
+        }
+    }
+
+    public GXDLMSSecureClient getClient() {
+        return client;
+    }
+
+    public void setClient(GXDLMSSecureClient client) {
+        this.client = client;
+    }
 }
