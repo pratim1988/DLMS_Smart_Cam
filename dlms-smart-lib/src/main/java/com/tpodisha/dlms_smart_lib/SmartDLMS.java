@@ -83,10 +83,10 @@ public class SmartDLMS {
         this.smartDLMSActionListener=smartDLMSActionListener;
         this.meterSerialNumber=meterSerialNumber;
         setupClient();
-        checkUSB();
+        //checkUSB();
     }
 
-    private void checkUSB() {
+    /*private void checkUSB() {
         usbHelper = new UsbHelper(ctx);
 
         usbHelper.setUsbPermissionListener(new UsbHelper.UsbPermissionListener() {
@@ -113,7 +113,7 @@ public class SmartDLMS {
             }
         }
 
-    }
+    }*/
 
     private void setupClient() {
         usbManager = (UsbManager) ctx.getSystemService(Context.USB_SERVICE);
@@ -591,7 +591,7 @@ public class SmartDLMS {
         // Get Association view from the meter.
         GXReplyData reply = new GXReplyData();
         readDataBlock(client.getObjectsRequest(), reply);
-        mDevice.setObjects(client.parseObjects(reply.getData(), true));
+        //mDevice.setObjects(client.parseObjects(reply.getData(), true));
     }
 
     private void readAssociationView() {
