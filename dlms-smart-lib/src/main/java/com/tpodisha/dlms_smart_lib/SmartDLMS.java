@@ -78,10 +78,12 @@ public class SmartDLMS {
     Boolean meterMatched=true;
     SmartDLMSActionListener smartDLMSActionListener;
     String meterSerialNumber;
-    public SmartDLMS(Context ctx,String meterSerialNumber,SmartDLMSActionListener smartDLMSActionListener) {
+    SmartAuth smartAuth;
+    public SmartDLMS(Context ctx,String meterSerialNumber,SmartDLMSActionListener smartDLMSActionListener,SmartAuth smartAuth) {
         this.ctx=ctx;
         this.smartDLMSActionListener=smartDLMSActionListener;
         this.meterSerialNumber=meterSerialNumber;
+        this.smartAuth=smartAuth;
         setupClient();
         checkUSB();
     }
@@ -137,19 +139,25 @@ public class SmartDLMS {
         mDevice.setMedia(new GXSerial(ctx));
 
         client.setUseLogicalNameReferencing(true);
-        client.setClientAddress(48);//for US
+        client.setClientAddress(smartAuth.getClientAddress());
+        //client.setClientAddress(48);//for US
         //client.setClientAddress(32);//for MR
         //client.setClientAddress(20);//if issue persist
         client.setServerAddress(1);
         client.getCiphering().setSecurity(Security.AUTHENTICATION_ENCRYPTION);
         client.setAuthentication(Authentication.HIGH);
         client.setInterfaceType(InterfaceType.HDLC);
-        client.getCiphering().setAuthenticationKey(hexStringToByteArray("31323334414243443132333441424344")); // 16 bytes
+        /*client.getCiphering().setAuthenticationKey(hexStringToByteArray("31323334414243443132333441424344")); // 16 bytes
         client.getCiphering().setBlockCipherKey(hexStringToByteArray("31323334414243443132333441424344"));   // 16 bytes
         client.getCiphering().setDedicatedKey(hexStringToByteArray("31323334414243443132333441424344"));
         client.getCiphering().setSystemTitle(hexStringToByteArray("48504C3732393938"));
-        client.setPassword("8888888888888888".getBytes());//for US
+        client.setPassword("8888888888888888".getBytes());//for US*/
         //client.setPassword("111111111111111".getBytes());//for MR
+        client.getCiphering().setAuthenticationKey(hexStringToByteArray(smartAuth.getAuthenticationKey())); // 16 bytes
+        client.getCiphering().setBlockCipherKey(hexStringToByteArray(smartAuth.getBlockCipherKey()));   // 16 bytes
+        client.getCiphering().setDedicatedKey(hexStringToByteArray(smartAuth.getDedicatedKey()));
+        client.getCiphering().setSystemTitle(hexStringToByteArray(smartAuth.getSystemTitle()));
+        client.setPassword(smartAuth.getPassword().getBytes());
     }
 
     private final BroadcastReceiver usbReceiver = new BroadcastReceiver() {
@@ -202,7 +210,7 @@ public class SmartDLMS {
                                 initializeConnection();
                                 Toast.makeText(ctx, "Connected.", Toast.LENGTH_SHORT).show();
                                 if (client.getObjects().isEmpty()) {
-                                    new AlertDialog.Builder(ctx)
+                                    /*new AlertDialog.Builder(ctx)
                                             .setTitle("Import association view")
                                             .setMessage("You need to read Association view to see all objects what the meter can offer. Do you want to do it now?")
                                             .setPositiveButton(android.R.string.ok, (dialog, which) -> {
@@ -210,7 +218,8 @@ public class SmartDLMS {
                                             })
                                             .setNegativeButton(android.R.string.cancel, (dialog, which) -> {
                                             })
-                                            .show();
+                                            .show();*/
+                                    readAssociationView();
                                 }/* else {
                                     toggleStatusButton();
                                 }*/
