@@ -47,7 +47,7 @@ dependencies {
     implementation(libs.gurux.serial.android) {
         exclude group: "org.gurux", module: "gurux.common"
     }
-    implementation "org.gurux:gurux.common.android:3.0.4"
+    implementation "org.gurux:gurux.common.android:3.0.6"
 }
 
 afterEvaluate {
@@ -57,7 +57,7 @@ afterEvaluate {
                 from components.release
                 groupId = 'com.github.pratim1988'
                 artifactId = 'DLMS_Smart_Cam'
-                version = '1.0.9'
+                version = '2.0.0'
             }
         }
     }

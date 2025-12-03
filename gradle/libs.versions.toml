@@ -6,7 +6,7 @@ espressoCore = "3.7.0"
 appcompat = "1.7.1"
 material = "1.13.0"
 guruxDlms = "4.0.79"
-guruxSerialAndroid = "3.0.2"
+guruxSerialAndroid = "3.0.4"
 guruxDlmsAndroid = "3.0.7"
 
 [libraries]
