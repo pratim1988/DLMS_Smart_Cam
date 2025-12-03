@@ -5,11 +5,11 @@ plugins {
 
 android {
     namespace 'com.tpodisha.dlms_smart_lib'
-    compileSdk 34
+    compileSdk 36
 
     defaultConfig {
-        minSdk 26
-        targetSdk 34
+        minSdk 29
+        targetSdk 36
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -57,7 +57,7 @@ afterEvaluate {
                 from components.release
                 groupId = 'com.github.pratim1988'
                 artifactId = 'DLMS_Smart_Cam'
-                version = '1.0.7'
+                version = '1.0.9'
             }
         }
     }
